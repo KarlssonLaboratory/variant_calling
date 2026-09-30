@@ -4,7 +4,7 @@
 
 pkgs_CRAN <- c(
   "data.table",
-  "tidyverse"
+  "tidyverse",
   "patchwork",
   "vcfR",
   "clinfun",
