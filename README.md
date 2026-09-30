@@ -1,49 +1,47 @@
-[![Build and Deploy Docker Container](https://github.com/KarlssonLaboratory/variant_call/actions/workflows/build_deploy.yml/badge.svg)](https://github.com/KarlssonLaboratory/variant_call/actions/workflows/build_deploy.yml)
+[![Build and Deploy Docker Container](https://github.com/KarlssonLaboratory/variant_calling/actions/workflows/build_deploy.yml/badge.svg)](https://github.com/KarlssonLaboratory/variant_calling/actions/workflows/build_deploy.yml)
 
-A rocker/r-ver:4.4.0 container with [vcfR](https://github.com/knausb/vcfR) R-package (and some dependencies). Mainly used for variant calling mutagenesis analysis.
-
-> [!NOTE]
-> Every push to `main` automatically builds and pushes the image to GitHub Container Registry. Tagged releases (e.g. `v1.0.0`) produce versioned image tags.
+A rocker/r-ver:4.4.0 container with [vcfR](https://github.com/knausb/vcfR) R-package (and some dependencies). Mainly used for variant calling analysis.
 
 <details>
   <summary>Included softwares</summary>
 
 + vcfR
 + tidyverse
++ patchwork
 + data.table
 + clinfun
 + R.utils
 + git
 + less
++ procps (useful inside Nextflow pipelines)
 </details>
 
 ## Pull the container
 
 ```sh
 # As docker
-docker pull ghcr.io/karlssonlaboratory/variant_call:530cf28
+docker pull ghcr.io/karlssonlaboratory/variant_call:3682d01
 
 # As apptainer
-apptainer pull docker://ghcr.io/karlssonlaboratory/variant_call:530cf28
+apptainer pull docker://ghcr.io/karlssonlaboratory/variant_call:3682d01
 
 # As singularity
-singularity pull docker://ghcr.io/karlssonlaboratory/variant_call:530cf28
+singularity pull docker://ghcr.io/karlssonlaboratory/variant_call:3682d01
 ```
 
 ## Run interactively
 
 ```sh
-docker run -it --rm -v $(pwd):/data ghcr.io/karlssonlaboratory/variant_call:530cf28
+docker run -it --rm -v $(pwd):/data ghcr.io/karlssonlaboratory/variant_call:3682d01
 ```
 
 ## Build locally
 
 ```sh
-git clone https://github.com/karlssonlaboratory/variant_call:530cf28.git
+git clone https://github.com/karlssonlaboratory/variant_call:3682d01.git
 cd variant_call
 docker build -t variant_call .
 ```
-
 
 <details>
   <summary>As nextflow process</summary>
@@ -54,8 +52,8 @@ process PROCESS_NAME {
 	. . .
 
 	container "${workflow.containerEngine == 'singularity' ?
-  	'docker://ghcr.io/karlssonlaboratory/variant_call:530cf28' :
-  	'ghcr.io/karlssonlaboratory/variant_call:530cf28'}"
+  	'docker://ghcr.io/karlssonlaboratory/variant_call:3682d01' :
+  	'ghcr.io/karlssonlaboratory/variant_call:3682d01'}"
 
   . . .
 }
@@ -63,3 +61,31 @@ process PROCESS_NAME {
 
 The container definition uses an [elvis operator](https://www.nextflow.io/docs/latest/reference/syntax.html#unary-expressions) = `<statement> ? <TRUE> : <FALSE>`
 </details>
+
+## Dockerfile details
+
+`Dockerfile` runs the content inside `install.R`, which holds all R-packages. Edit this file in order to add more packages
+
+```yml
+# Dockerfile
+COPY install.R /tmp/install.R
+RUN Rscript /tmp/install.R
+```
+
+```r
+# install.R
+pkgs_CRAN <- c(
+  "data.table",
+  "tidyverse"
+  "patchwork",
+  "vcfR",
+  "clinfun",
+  "R.utils"
+)
+
+install.packages(
+  pkgs_CRAN,
+  repos = getOption("repos"),
+  Ncpus = parallel::detectCores()
+)
+```

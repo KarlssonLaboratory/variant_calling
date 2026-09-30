@@ -6,6 +6,7 @@ on:
     paths:
       - Dockerfile
       - .github/workflows/build_deploy.yml
+      - install.R
   pull_request:
     branches: [main]
 
@@ -65,7 +66,7 @@ jobs:
             library(vcfR)
             library(data.table)
             cat('All packages loaded successfully\n')
-            cat('Seurat version:', as.character(packageVersion('vcfR')), '\n')
+            cat('vcfR version:', as.character(packageVersion('vcfR')), '\n')
           "
 
       # Only push if test passed

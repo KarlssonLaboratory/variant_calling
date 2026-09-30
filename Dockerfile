@@ -1,16 +1,15 @@
 FROM rocker/r-ver:4.4.0
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN apt-get update && \
+  apt-get install -y --no-install-recommends \
   git \
   less \
+  procps \
   && rm -rf /var/lib/apt/lists/*
 
-# Use Posit Package Manager for faster binary installs
-ENV CRAN_REPO="https://packagemanager.posit.co/cran/__linux__/jammy/latest"
-
-# Install CRAN packages
-RUN R -e "install.packages(c('data.table', 'vcfR', 'tidyverse', 'clinfun', 'R.utils'), repos='${CRAN_REPO}')"
+# Install R-packages
+COPY install.R /tmp/install.R
+RUN Rscript /tmp/install.R
 
 WORKDIR /data
-
 CMD ["/bin/bash"]
