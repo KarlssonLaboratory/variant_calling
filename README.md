@@ -1,4 +1,4 @@
-[![Build and Deploy Docker Container](https://github.com/KarlssonLaboratory/variant_calling/actions/workflows/build_deploy.yml/badge.svg)](https://github.com/KarlssonLaboratory/variant_calling/actions/workflows/build_deploy.yml)
+[![Build and Release Docker Container](https://github.com/KarlssonLaboratory/variant_calling/actions/workflows/build-release.yml/badge.svg)](https://github.com/KarlssonLaboratory/variant_calling/actions/workflows/build-release.yml)
 
 A rocker/r-ver:4.4.0 container with [vcfR](https://github.com/knausb/vcfR) R-package (and some dependencies). Mainly used for variant calling analysis.
 
@@ -20,25 +20,25 @@ A rocker/r-ver:4.4.0 container with [vcfR](https://github.com/knausb/vcfR) R-pac
 
 ```sh
 # As docker
-docker pull ghcr.io/karlssonlaboratory/variant_call:3682d01
+docker pull ghcr.io/karlssonlaboratory/variant_call:f23646d
 
 # As apptainer
-apptainer pull docker://ghcr.io/karlssonlaboratory/variant_call:3682d01
+apptainer pull docker://ghcr.io/karlssonlaboratory/variant_call:f23646d
 
 # As singularity
-singularity pull docker://ghcr.io/karlssonlaboratory/variant_call:3682d01
+singularity pull docker://ghcr.io/karlssonlaboratory/variant_call:f23646d
 ```
 
 ## Run interactively
 
 ```sh
-docker run -it --rm -v $(pwd):/data ghcr.io/karlssonlaboratory/variant_call:3682d01
+docker run -it --rm -v $(pwd):/data ghcr.io/karlssonlaboratory/variant_call:f23646d
 ```
 
 ## Build locally
 
 ```sh
-git clone https://github.com/karlssonlaboratory/variant_call:3682d01.git
+git clone https://github.com/karlssonlaboratory/variant_call:f23646d.git
 cd variant_call
 docker build -t variant_call .
 ```
@@ -52,8 +52,8 @@ process PROCESS_NAME {
 	. . .
 
 	container "${workflow.containerEngine == 'singularity' ?
-  	'docker://ghcr.io/karlssonlaboratory/variant_call:3682d01' :
-  	'ghcr.io/karlssonlaboratory/variant_call:3682d01'}"
+    'docker://ghcr.io/karlssonlaboratory/variant_call:f23646d' :
+    'ghcr.io/karlssonlaboratory/variant_call:f23646d'}"
 
   . . .
 }
